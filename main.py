@@ -253,7 +253,7 @@ def subsetCheck(fixed_list, isSolution): #Our 2nd function
       #for all values in the subsetlist
       for j in range(0, len(subset_list)):
         if (checkSolution(subsets_list[j]) == True): #attempt to solve  the stack and continue checking all stacks
-          solveablestacks+=1
+          print("Solved")
         
         else:
           print(f"Unable to stack here: {subsets_list[j]}") #if stack is unsolvable we found a our minimum obstacle
