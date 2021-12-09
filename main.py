@@ -65,7 +65,7 @@ def split_list(all_patterns): #appends the subsets as a list into a master list 
 # ABOVE: Generating Colors for all Puzzles
 #-------------------------------------------------------------
 
-def rotate_shit(listHere): #Change this name
+def rotate_right(listHere): #Change this name
   listHere = listHere[-1:] + listHere[:-1]
   return listHere
 
@@ -94,116 +94,68 @@ def compare_first_two(long_list):
 def Diff(li1, li2):
     return list(set(li1) - set(li2)) + list(set(li2) - set(li1))
 
-def compare_next_values(first_two, orig_list):
+def compare_next_values(orig_list): #CheckSolutions
   first_face = []
   second_face = []
   third_face = []
+  rotations_list = [0] * len(orig_list) #0s for size of list
   sec_list = []
-  fixed_order = []
-  obstacles = []
   missing_values_here = 1
 
-  for i in range(0, len(first_two)): #gives us the first two values
-    first_face.append(first_two[i][0])
-    second_face.append(first_two[i][1])
-    third_face.append(first_two[i][2])
+  for i in range(0, 1):
+    first_face.append(orig_list[0][0])
+    second_face.append(orig_list[0][1])
+    third_face.append(orig_list[0][2])
 
-
-  flag = 0
-  #len_orig = len(orig_list)
-  #true_orginal =- 
-  for i in range(2, len(orig_list)):
+  i = 0
+  while(i < len(orig_list)):
     original_sec = orig_list[i]
-    rotations = 0
-    if(flag == 0):
-      if((orig_list[i][0] in first_face or orig_list[i][1] in second_face or orig_list[i][2] in third_face)):
+    flag = 0
+    while(orig_list[i][0] in first_face or orig_list[i][1] in second_face or orig_list[i][2] in third_face): #wont be true during obstacle
+      print(i)
+      rotations_list[i] += 1
+      rotations_list[i] = rotations_list[i] % 3
+      #rotate_right()
+      print(f"BEFORE IF: {orig_list}")
 
-        #rotate
-        while(orig_list[i][0] in first_face or orig_list[i][1] in second_face or orig_list[i][2] in third_face):
-          
-          if(rotations < 4 and i == len(orig_list) - 1): #if we hit an end
-            #note: no obstacle
-            print(f"REACHED WALL at i value {i}")
-            missing_values_here = None
-            flag = 1
-            #break
-          
+      if(rotations_list[i] != 0): #we have to rotate
+        sec_list = rotate_right(original_sec)
+        orig_list[i] = sec_list
+        print(f"AFTER IF: {orig_list}")
 
-          if(rotations < 4):
-            sec_list = rotate_shit(original_sec)
-            orig_list[i] = sec_list
-            rotations += 1
+      else:
+        print("ELSE")
+        i-= 1
+        sec_list = orig_list[i] 
+        sec_list =rotate_right(sec_list)
+        orig_list[i] = sec_list
+        rotations_list[i] += 1
+        rotations_list[i] = rotations_list[i] % 3   
+           
+        print(i)
+        flag = 1
+        first_face = []
+        second_face = []
+        third_face = []
+        for j in range(0, i):
+          first_face.append(orig_list[j][0])
+          second_face.append(orig_list[j][1])
+          third_face.append(orig_list[j][2])
+        if(i == 0):
+          print("NO SOLUTION")
+          print(f"OBSTACLE: {original_sec} it is slice #{i + 1}!")
+          return False
+          #break
+    if (flag == 0):
+      i+= 1
+      first_face.append(original_sec[0])
+      second_face.append(original_sec[1])
+      third_face.append(original_sec[2])
 
-          else:
-            print(f"OBSTACLE: {original_sec} it is slice #{i + 1}!")
-            obstacles.append(original_sec)
-            flag = 1
-            sec_list = original_sec
-            break
+  print("\n\n\n")
+  print(orig_list)
 
-          '''
-          if(rotations < 4 and i == len(orig_list) - 1): #if we hit an end
-            #note: no obstacle
-            print(f"END HERE at i value {i}")
-            break
-          '''
-          
-        fixed_order.append(original_sec)
-        first_face.append(sec_list[0])
-        second_face.append(sec_list[1])
-        third_face.append(sec_list[2])
-        first_two.append(sec_list) #this will be our final list
-
-
-        print(" ORIGINAL       FIXED")
-        res = "\n".join("{} {}".format(x, y) for x, y in zip(orig_list, first_two))
-        print(res)
-
-
-      else: #simply add to the list
-        fixed_order.append(original_sec)
-        first_face.append(original_sec[0])
-        second_face.append(original_sec[1])
-        third_face.append(original_sec[2])
-        first_two.append(original_sec)
-    else:
-      #print("OBSTACLE FOUNDD")
-      #first_two.append(sec_list)      
-      #print(f"First Two (finished) {first_two}") 
-      break
-
-  #print(f"First Two (finished) {first_two}") 
-
-  if(missing_values_here == None):
-    missing_values = None
-    current_break = missing_values
-    first_two.append(missing_values)
-  else:
-    current_break = first_two[-1]
-    missing_values = orig_list[i:len(orig_list) ]
-    for i in range(0, len(missing_values)):
-      first_two.append(missing_values[i])
-  '''
-  current_break = first_two[-1]
-  
-  missing_values = orig_list[i:len(orig_list) ]
-  for i in range(0, len(missing_values)):
-    first_two.append(missing_values[i])
-  '''
-  #missing_values = Diff(first_two, orig_list)
-
-  print(f"MISSING {missing_values}")
-
-  #for i in range(0, len(missing_values)):
-  #  first_two.append(missing_values[i])
-  #print(f"Fixed (finished) {fixed_order}") 
-
-  list_and_break = []
-  list_and_break.append(first_two)
-  #print(f"FIRST TWO METHOD {first_two}")
-  list_and_break.append(current_break)
-
-  return list_and_break 
+  return True
 
 
 def rotate_backwards(orig_list): #need it to return the list and the current crash
@@ -227,6 +179,9 @@ def return_min_obstacle(list):
 #-------------------------------------------------------------
 # Below: Finding Subsets and checking if they are obstacles or solutions
 
+
+
+'''
 def findSubsetsList(givenList, subsetSize):
   all_combinations = combinations(givenList,subsetSize)
   all_combinations = list(all_combinations)
@@ -242,8 +197,9 @@ def subsetCheck(fixed_list, isSolution): #Our 2nd function
     print("\n")
 
   else: #if the puzzle has an obstacle
+    mini_obstacle = fixed_list #up to break point
     print("No Solution Found... Locating Minimum Obstacle...")
-    for i in range(1, crash_index): #crash_index choose n #generate all combs
+    for i in xrange(crash_index: 1): #crash_index choose n #generate all combs
 
       found_obstacle = False
       print(f"Looking for all subsets of size: {i}..\n")
@@ -253,22 +209,23 @@ def subsetCheck(fixed_list, isSolution): #Our 2nd function
       #for all values in the subsetlist
       for j in range(0, len(subset_list)):
         if (checkSolution(subsets_list[j]) == True): #attempt to solve  the stack and continue checking all stacks
+          true_counter += 1
           print("Solved")
         
         else:
           print(f"Unable to stack here: {subsets_list[j]}") #if stack is unsolvable we found a our minimum obstacle
           mini_obstacle = subsets_list[j]
           found_obstacle = True
-          break
+          continue
       
-      if(found_obstacle == True):
-        #If we found an obstacle while iterating through subsets
-        print("We found an obstacle..\n")
-        print(f"Minimum Obstacle: {mini_obstacle}")
-        break
-
-      else: 
-        print("UHHHH")
+        if(found_obstacle == True):
+          #If we found an obstacle while iterating through subsets
+          print("We found an obstacle..\n")
+          print(f"Minimum Obstacle: {mini_obstacle}")
+          #continue
+          break
+    print(f"Min Obstacle: {mini_obstacle}")
+'''
 
 
 def main():
@@ -276,13 +233,16 @@ def main():
 
   #all_patterns_list = generate_colors() #generating list of colors
   #master_list = split_list(all_patterns_list) #splitting it into a master 
-
-  our_main_list = [[5,3,1], [5,4,2], [6,4,2], [1,5,3]]
-  #our_main_list = [[5,3,1], [5,4,2], [3, 0, 3], [6,4,2], [1,5,3]]
-
   #subsets 4
   #subects 3
   #subsets 2
+
+
+  our_main_list = [[5,3,1], [5,4,2], [6,4,2], [1,5,3], [1,4,2], [6,3,6]]
+  compare_next_values(our_main_list)
+
+
+  '''
   print("SUBSETS")
   subsetCount = 3
   comb = findSubsetsList(our_main_list, subsetCount) #generate all possible combinations of subsets for given {size}
@@ -292,7 +252,7 @@ def main():
   #our_main_list = [[5,3,1], [5,4,2], [6,4,2], [1,5,3], [1,4,2], [6,3,6]]
   temp_main = our_main_list.copy() #original full list
 
-  '''
+
   first_two = compare_first_two(temp_main)
   new_value = compare_next_values(first_two, temp_main) #returns new list -> 
   print(new_value)
@@ -308,7 +268,6 @@ def main():
 
   #list_subsets = return_min_obstacle(our_main_list)
   #print(list_subsets)
-  '''
 
   first_two = compare_first_two(temp_main)
   new_value = compare_next_values(first_two, temp_main) #returns new list -> 
@@ -362,7 +321,7 @@ def main():
       list_obstacle.append(current_crash)
 
       rotation += 1
-
+  '''
 
 if __name__ == "__main__":
     main()
