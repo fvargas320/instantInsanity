@@ -132,8 +132,8 @@ def isSolution(orig_list_main): #CheckSolutions
       first_face.append(original_sec[0])
       second_face.append(original_sec[1])
       third_face.append(original_sec[2])
-  #print(orig_list)
-
+  print("\nTHIS PUZZLE HAS A SOLUTION!")
+  print(f"\nSOLUTION: {orig_list}")
   return True
 
 
@@ -189,18 +189,26 @@ def main():
   main_puzzles_list = generate_colors()
   #first_puzzle = main_puzzles_list[0] #values from first puzzle
   master_list = split_list(main_puzzles_list)
-  puzzle_one = master_list[0] #puzzle 1
+
+  puzzle_one = master_list[0] #NO SOLUTION
+  puzzle_two = master_list[1] #NO SOLUTION
+  puzzle_three = master_list[2] #NO SOLUTION
+  puzzle_four = master_list[3] #NO SOLUTION
+  puzzle_five = master_list[4] #SOLUTION
+  puzzle_six = master_list[5] #NO SOLUTION
 
 
-  our_main_list = [[5,3,1], [5,4,2], [6,4,2], [1,5,3], [1,4,2], [6,3,6], [6, 6, 6]]
+  #our_main_list = [[5,3,1], [5,4,2], [6,4,2], [1,5,3], [1,4,2], [6,3,6], [6, 6, 6]]
 
-  isSolutionValue = isSolution(puzzle_one)
+  print(f"Check for obstacles in List: {puzzle_five}")
 
+  isSolutionValue = isSolution(puzzle_five)
   if(isSolutionValue == True):
-    print("PROGRAM DONE!")
+    print("\nPROGRAM DONE..")
   else:
-    print("CALLING SUBSET CHECKER")
-    subsetCheck(puzzle_one)
+    print("\nThis list has an obstacle somewhere.. Lets Find The Min. Obstacle!")
+    print("CALLING SUBSET CHECKER..")
+    #subsetCheck(puzzle_five)
 
 
 if __name__ == "__main__":
