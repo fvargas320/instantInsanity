@@ -83,8 +83,9 @@ def isSolution(orig_list_main): #CheckSolutions
     second_face.append(orig_list[0][1])
     third_face.append(orig_list[0][2])
 
+  #print(f"ORIGIN LIST 2: {orig_list}")
   i = 1
-  while(i < len(orig_list)):
+  while(i < len(orig_list)): #DONT WANT TO GO OVER 31
     original_sec = orig_list[i]
     flag = 0
     while(orig_list[i][0] in first_face or orig_list[i][1] in second_face or orig_list[i][2] in third_face): #wont be true during obstacle
@@ -97,10 +98,10 @@ def isSolution(orig_list_main): #CheckSolutions
       if(rotations_list[i] != 0): #we have to rotate
         sec_list = rotate_right(original_sec)
         orig_list[i] = sec_list
-        #print(f"AFTER IF: {orig_list}")
+        #print(f"AFTER IF: {orig_list} at i value {i}")
         #break
 
-      else:
+      else: #if it is = 0
         #print("ELSE")
         while True:
           i-= 1
@@ -109,7 +110,9 @@ def isSolution(orig_list_main): #CheckSolutions
           orig_list[i] = sec_list
           rotations_list[i] += 1
           rotations_list[i] = rotations_list[i] % 3
+          #print("HERERERE")
           if(rotations_list[i] != 0 or i == 0):
+            #print("HAHAHA")
             break
            
         #print(i)
@@ -129,11 +132,18 @@ def isSolution(orig_list_main): #CheckSolutions
           #break
     if (flag == 0):
       i+= 1
-      first_face.append(original_sec[0])
-      second_face.append(original_sec[1])
-      third_face.append(original_sec[2])
+      first_face.append(orig_list[i - 2][0])
+      second_face.append(orig_list[i - 2][1])
+      third_face.append(orig_list[i - 2][2])
+
+  print(f"\nFIRST FACE: {first_face} \n")
+  print(f"2nd FACE: {second_face} \n")
+  print(f"3rd FACE: {third_face} \n")
+
+  print(orig_list)
+  #print(original_sec)
   print("\nTHIS PUZZLE HAS A SOLUTION!")
-  print(f"\nSOLUTION: {orig_list}")
+  #print(f"\nSOLUTION: {orig_list}")
   return True
 
 
@@ -155,7 +165,8 @@ def subsetCheck(orig_list): #Our 2nd function
   i = len(orig_list)
   #for i in range(len(orig_list), 1):
   subsets_list = []
-  for i in range(len(orig_list) - 1, 1, -1):
+  #for i in range(len(orig_list) - 1, 1, -1):
+  for i in range(2, len(orig_list) + 1):
     found_obstacle = False
     #print(f"Looking for all subsets of size: {i}..\n")
     subsets_list = findSubsetsList(orig_list, i) #generate subsets in list of size i #should i check starting from crash index?
@@ -188,6 +199,7 @@ def main():
 
   main_puzzles_list = generate_colors()
   #first_puzzle = main_puzzles_list[0] #values from first puzzle
+
   master_list = split_list(main_puzzles_list)
 
   puzzle_one = master_list[0] #NO SOLUTION
@@ -196,19 +208,22 @@ def main():
   puzzle_four = master_list[3] #NO SOLUTION
   puzzle_five = master_list[4] #SOLUTION
   puzzle_six = master_list[5] #NO SOLUTION
+  new_list = [[3, 5, 7], [10, 12, 14], [17, 19, 21], [23, 26, 28], [30, 2, 4], [6, 9, 11], [13, 15, 18], [20, 22, 25], [27, 29, 31], [7, 3, 5], [14, 10, 12], [21, 17, 19], [28, 23, 26], [4, 30, 2], [11, 6, 8], [18, 13, 15], [25, 20, 22], [31, 27, 29], [7, 3, 5], [14, 10, 12], [21, 16, 19], [28, 23, 26], [4, 30, 2], [11, 6, 8], [18, 13, 15], [24, 20, 22], [31, 27, 29], [8, 16, 1], [24, 16, 1], [1, 24, 9], [25, 17, 9]]
 
+  #puzzle_test = [[5,3,1], [5,4,2], [6,4,2], [1,5,3], [1,4,2], [6,3,6] ]
 
   #our_main_list = [[5,3,1], [5,4,2], [6,4,2], [1,5,3], [1,4,2], [6,3,6], [6, 6, 6]]
 
-  print(f"Check for obstacles in List: {puzzle_five}")
+  print(f"Check for obstacles in List: {puzzle_six}")
 
-  isSolutionValue = isSolution(puzzle_five)
+  isSolutionValue = isSolution(puzzle_six)
+
   if(isSolutionValue == True):
     print("\nPROGRAM DONE..")
   else:
     print("\nThis list has an obstacle somewhere.. Lets Find The Min. Obstacle!")
     print("CALLING SUBSET CHECKER..")
-    #subsetCheck(puzzle_five)
+    subsetCheck(puzzle_six)
 
 
 if __name__ == "__main__":
